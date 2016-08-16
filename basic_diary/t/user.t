@@ -1,7 +1,6 @@
 use strict;
 use warnings;
 use Model::User;
-use Data::Dumper;
 
 use Test::More;
 
@@ -17,7 +16,6 @@ my $diary = $user->add_diary(
   name => 'John の日記です'
 );
 is $diary->diary_name, 'John の日記です';
-print Dumper $user;
 
 
 done_testing();
