@@ -11,24 +11,24 @@ print Dumper $user1;
 
 # Diary クラスのインスタンスが返る
 my $diary = $user1->add_diary(
-  name => encode_utf8 'John の日記です'
+  name => 'John の日記です'
 );
 print Dumper $diary;
 
-print $diary->diary_name, "\n"; # John の日記です
+print encode_utf8 $diary->diary_name, "\n"; # John の日記です
 
 # Entry クラスのインスタンスが返る
 my $entry1 = $diary->add_entry(
   date  => '2016-08-15',
-  title => encode_utf8 '日記だよ',
-  body  => encode_utf8 'これが日記の本文だよ',
+  title => '日記だよ',
+  body  => 'これが日記の本文だよ',
 );
 print Dumper $entry1;
 
 my $entry2 = $diary->add_entry(
   date  => '2016-08-16',
-  title => encode_utf8 'これも日記だよ',
-  body  => encode_utf8 'やっぱり日記の本文だよ',
+  title => 'これも日記だよ',
+  body  => 'やっぱり日記の本文だよ',
 );
 print Dumper $entry2;
 print Dumper $diary;
