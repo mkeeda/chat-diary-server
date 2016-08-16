@@ -1,32 +1,39 @@
-print "ここになにかかく";
+use strict;
+use warnings;
+use utf8;
 
-__END__
+use Model::User;
+use Data::Dumper;
+use Encode;
 
-=head1 課題(1日目)
+my $user1 = Model::User->new(user_name => 'John');
+print Dumper $user1;
 
-このファイルに、1日目の課題の内容としてコードを記述してください。
-教科書に記載した以下のようなコードが書かれているイメージです(このコードそのものを転記する必要はありません)。
+# Diary クラスのインスタンスが返る
+my $diary = $user1->add_diary(
+  name => encode_utf8 'John の日記です'
+);
+print Dumper $diary;
 
-  use User;
+print $diary->diary_name, "\n"; # John の日記です
 
-  my $user1 = User->new(name => 'John');
+# Entry クラスのインスタンスが返る
+my $entry1 = $diary->add_entry(
+  date  => '2016-08-15',
+  title => encode_utf8 '日記だよ',
+  body  => encode_utf8 'これが日記の本文だよ',
+);
+print Dumper $entry1;
 
-  # Diary クラスのインスタンスが返る
-  my $diary = $user1->add_diary(
-      name   => 'John の日記です',
-  );
+my $entry2 = $diary->add_entry(
+  date  => '2016-08-16',
+  title => encode_utf8 'これも日記だよ',
+  body  => encode_utf8 'やっぱり日記の本文だよ',
+);
+print Dumper $entry2;
+print Dumper $diary;
 
-  print $diary->name; # John の日記です
+my $recent_entries = $diary->get_recent_entries;
+print Dumper $recent_entries;
+print $recent_entries->[0]->body; # やっぱり日記の本文だよ
 
-  # Entry クラスのインスタンスが返る
-  my $entry1 = $diary->add_entry(
-      title => '日記だよ',
-      body  => 'これが日記の本文だよ',
-  );
-  my $entry2 = $diaryg->add_entry(
-      title => 'これも日記だよ',
-      body  => 'やっぱり日記の本文だよ',
-  );
-
-  my $recent_entries = $diary->get_recent_entries;
-  print $recent_entries->[0]->body; # やっぱり日記の本文だよ
