@@ -3,6 +3,7 @@ use warnings;
 use Model::User;
 
 use Test::More;
+use Test::Fatal;
 
 use_ok 'Model::User';
 
@@ -17,5 +18,6 @@ my $diary = $user->add_diary(
 );
 is $diary->diary_name, 'John の日記です';
 
-
+#例外テスト
+like( exception { $user->add_diary },  qr/diary only one/, '日記を2個以上追加しようとした');
 done_testing();

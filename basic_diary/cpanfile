@@ -1,1 +1,2 @@
 requires 'Class::Accessor::Lite';
+requires 'Test::Fatal';
