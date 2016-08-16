@@ -13,8 +13,16 @@ use Class::Accessor::Lite (
   rw => [qw(
     entries
     )],
-  new => 1,
+  new => 0,
 );
+
+sub new {
+    my ($class, %args) = @_;
+    return bless {
+      entries => [],
+      %args
+    }, $class;
+}
 
 sub add_entry {
   my ($self, %args) = @_;
@@ -23,7 +31,7 @@ sub add_entry {
     title => $args{title},
     body  => $args{body}
   );
-  push @{$self->{entries}}, $entry;
+  push @{$self->entries}, $entry;
   return $entry;
 }
 
@@ -31,7 +39,7 @@ sub get_recent_entries {
   my ($self) = @_;
   my @recent_entries = sort { 
     $b->{date} cmp $a->{date}
-  } @{$self->{entries}};
+  } @{$self->entries};
   
   return \@recent_entries;
 }
