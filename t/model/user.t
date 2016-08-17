@@ -19,7 +19,6 @@ sub _use : Test(startup => 1) {
 }
 
 sub _accessor : Tests {
-    my $now = Intern::Diary::Util::now;
     my $user = Intern::Diary::Model::User->new(
         user_id => 1,
         name    => 'user_name',
