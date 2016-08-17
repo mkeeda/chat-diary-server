@@ -27,6 +27,7 @@ config default => {
     'file.log.error'  => 'log/error_log',
     'dir.static.root'    => 'static',
     'dir.static.favicon' => 'static/images',
+    db_timezone => 'UTC'
 };
 
 config production => {

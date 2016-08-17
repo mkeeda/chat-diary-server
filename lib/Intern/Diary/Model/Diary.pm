@@ -1,10 +1,9 @@
-package Intern::Diary::Model::Bookmark;
+package Intern::Diary::Model::Diary;
 
 use strict;
 use warnings;
 use utf8;
 
-use JSON::Types qw();
 
 use Class::Accessor::Lite (
     ro => [qw(
@@ -12,6 +11,11 @@ use Class::Accessor::Lite (
         user_id
 
         title
-    )]
-    new => 1,
+        )],
+    rw => [qw(
+        entries
+        )],
+    new => 1
 );
+
+1;
