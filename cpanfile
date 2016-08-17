@@ -37,6 +37,8 @@ requires 'Devel::KYTProf';
 on test => sub {
     requires 'Test::More';
     requires 'Test::Class';
+    requires 'Test::Deep';
+    requires 'Test::Time';
     requires 'Test::WWW::Mechanize::PSGI';
     requires 'String::Random';
     requires 'DBIx::RewriteDSN';
