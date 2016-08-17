@@ -14,10 +14,6 @@ my $diary = $user1->add_diary(
   name => 'John の日記1'
 );
 print Dumper $diary;
-
-my $diary = $user1->add_diary(
-  name => 'John の日記2'
-);
 print Dumper $user1;
 
 print encode_utf8 $diary->diary_name, "\n"; # John の日記です
