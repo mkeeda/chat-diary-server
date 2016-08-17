@@ -11,11 +11,10 @@ use Intern::Diary::Service::Diary;
 use Intern::Diary::Service::Entry;
 
 my %HANDLERS = (
-    add_d    => \&add_diary,
-    add_e    => \&add_entry,
-    list_d   => \&list_diaries,
-    list_e   => \&list_entries,
-    delete => \&delete_entry,
+    add_d  => \&add_diary,
+    add_e  => \&add_entry,
+    list_d => \&list_diaries,
+    list_e => \&list_entries,
 );
 
 my $name     = shift @ARGV;
