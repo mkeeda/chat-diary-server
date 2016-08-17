@@ -13,7 +13,8 @@ use Intern::Diary::Service::Entry;
 my %HANDLERS = (
     add_d    => \&add_diary,
     add_e    => \&add_entry,
-    list   => \&list_entries,
+    list_d   => \&list_diaries,
+    list_e   => \&list_entries,
     delete => \&delete_entry,
 );
 
@@ -69,4 +70,24 @@ sub add_entry {
             entry_title  => $entry_title,
             body         => $body
         });
+}
+
+sub list_diaries {
+    my ($user, $limit) = @_;
+
+    unless(defined $limit) {
+        $limit = 10;
+    }
+    printf "--- %s's Diaries ---\n", $user->name;
+
+    my $diarys = Intern::Diary::Service::Diary->find_diarys_by_user($db, +{
+        user => $user,
+        limit => $limit
+    });
+
+    print 'diary_id user_id title' . "\n";
+    foreach my $diary (@$diarys) {
+        print $diary->diary_id . ' ' . $diary->user_id . ' ' . encode_utf8($diary->title) . "\n";
+    }
+
 }
