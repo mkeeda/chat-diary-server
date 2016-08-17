@@ -80,14 +80,40 @@ sub list_diaries {
     }
     printf "--- %s's Diaries ---\n", $user->name;
 
-    my $diarys = Intern::Diary::Service::Diary->find_diarys_by_user($db, +{
+    my $diaries = Intern::Diary::Service::Diary->find_diarys_by_user($db, +{
         user => $user,
         limit => $limit
     });
 
     print 'diary_id user_id title' . "\n";
-    foreach my $diary (@$diarys) {
+    foreach my $diary (@$diaries) {
         print $diary->diary_id . ' ' . $diary->user_id . ' ' . encode_utf8($diary->title) . "\n";
+    }
+}
+
+sub list_entries {
+    my ($user, $diary_id, $limit) = @_;
+
+    unless(defined $limit) {
+        $limit = 10;
+    }
+
+    die 'diary_id required' unless defined $diary_id;
+
+    printf "--- %s's Entries ---\n", $user->name;
+
+    my $entries = Intern::Diary::Service::Entry->find_entries_by_diary_id($db, +{
+        diary_id => $diary_id,
+        limit => $limit
+    });
+
+    print 'entry_id title diary_id title body created_date' . "\n";
+    foreach my $entry (@$entries) {
+        print $entry->entry_id . ' ' . 
+        $entry->diary_id . ' ' . 
+        encode_utf8($entry->title) . ' ' . 
+        encode_utf8($entry->body) . ' ' . 
+        $entry->created_date ."\n";
     }
 
 }

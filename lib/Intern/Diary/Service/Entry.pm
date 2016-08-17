@@ -8,6 +8,22 @@ use Carp qw(croak);
 
 use Intern::Diary::Model::Entry;
 
+sub find_entries_by_diary_id {
+    my ($class, $db, $args) = @_;
+
+    my $diary_id = $args->{diary_id} // croak 'diary_id required';
+    my $limit = $args->{limit} // croak 'limit required';
+    
+
+    my $entries = $db->select_all(q[
+        SELECT * FROM entry
+          WHERE diary_id  = ?
+          LIMIT ?
+    ], $diary_id, $limit) or return;
+    return [ map {
+        Intern::Diary::Model::Entry->new($_);
+    } @$entries ];
+}
 
 sub create {
     my ($class, $db, $args) = @_;

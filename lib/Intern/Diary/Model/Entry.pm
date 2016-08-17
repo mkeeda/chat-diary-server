@@ -1,4 +1,4 @@
-package Intern::Bookmark::Model::Entry;
+package Intern::Diary::Model::Entry;
 
 use strict;
 use warnings;
@@ -14,5 +14,13 @@ use Class::Accessor::Lite (
     )],
     new => 1,
 );
+
+
+# sub created_date {
+#     my ($self) = @_;
+#     $self->{_created} ||= eval { Intern::Bookmark::Util::datetime_from_db(
+#         $self->{created}
+#     )};
+# }
 
 1;
