@@ -106,14 +106,13 @@ sub list_entries {
         diary_id => $diary_id,
         limit => $limit
     });
-
     print 'entry_id title diary_id title body created_date' . "\n";
     foreach my $entry (@$entries) {
         print $entry->entry_id . ' ' . 
         $entry->diary_id . ' ' . 
         encode_utf8($entry->title) . ' ' . 
         encode_utf8($entry->body) . ' ' . 
-        $entry->created_date ."\n";
+        $entry->created_date->ymd ."\n";
     }
 
 }

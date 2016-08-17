@@ -10,17 +10,16 @@ use Class::Accessor::Lite (
         diary_id
         title
         body
-        created_date
     )],
     new => 1,
 );
 
 
-# sub created_date {
-#     my ($self) = @_;
-#     $self->{_created} ||= eval { Intern::Bookmark::Util::datetime_from_db(
-#         $self->{created}
-#     )};
-# }
+sub created_date {
+    my ($self) = @_;
+    $self->{_created_date} ||= eval { Intern::Diary::Util::datetime_from_db(
+        $self->{created_date}
+    )};
+}
 
 1;
