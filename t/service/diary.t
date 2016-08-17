@@ -141,6 +141,66 @@ sub create : Tests {
     };
 }
 
+sub add_diary : Tests {
+    my ($self) = @_;
+    my $c = Intern::Diary::Context->new;
+
+    #titleをランダム生成
+    my $title = random_regex('test_diary_\w{15}');
+
+    #userをランダムなnameで生成
+    my $name = random_regex('test_diary_\w{15}');
+    $c->dbh->query(q[
+        INSERT INTO user (name)
+        VALUES (?)
+        ], [ $name ]);
+
+    my $user = Intern::Diary::Service::User->find_user_by_name($c->dbh, {
+            name => $name,
+        });
+
+    subtest 'userわたさないとき失敗する' => sub {
+        dies_ok {
+            Intern::Diary::Service::Diary->create($c->dbh, {
+                    diary_title => $title
+                });
+        };
+    };
+
+    subtest 'titleわたさないとき失敗する' => sub {
+        dies_ok {
+            Intern::Diary::Service::Diary->create($c->dbh, {
+                    user => $user,
+                });
+        };
+    };
+
+    subtest 'diaryを追加できる' => sub {
+        #先にDiaryを登録
+        my $dbh = $c->dbh;
+        $dbh->query(q[
+            INSERT INTO diary (user_id, title)
+            VALUES (?)
+            ], [ $user->user_id, $title ]);
+        my $diary_id = $dbh->last_insert_id;
+
+        Intern::Diary::Service::Diary->add_diary($c->dbh, {
+                user=> $user,
+                diary_title => $title,
+            });
+
+        my $diary = $c->dbh->select_row(q[
+            SELECT * FROM diary
+              WHERE
+                diary_id = ?
+        ],  $diary_id);
+
+        ok $diary, 'diaryができている';
+        is $diary->{user_id}, $user->user_id, 'user_idが一致する';
+        is $diary->{title}, $title, 'titleが一致する';
+    };
+}
+
 __PACKAGE__->runtests;
 
 1;
