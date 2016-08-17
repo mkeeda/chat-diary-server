@@ -52,6 +52,23 @@ sub create {
     ], [ $diary_id, $title, $body, $now ]);
 }
 
+sub update {
+    my ($class, $db, $args) = @_;
+
+    my $entry_id = $args->{entry_id} // croak 'entry_id required';
+    my $title = $args->{title} // croak 'title required';
+    my $body = $args->{body} // croak 'body required';
+
+    $db->query(q[
+        UPDATE entry
+          SET
+            title = ?,
+            body = ?
+          WHERE
+            entry_id = ?
+    ], $title, $body, $entry_id );
+}
+
 sub delete_entry {
     my ($class, $db, $entry) = @_;
 

@@ -16,6 +16,7 @@ my %HANDLERS = (
     list_d => \&list_diaries,
     list_e => \&list_entries,
     delete_e => \&delete_entry,
+    update_e => \&update_entry,
 );
 
 my $name     = shift @ARGV;
@@ -129,4 +130,20 @@ sub delete_entry {
     });
 
     print "Deleted \n";
+}
+
+sub update_entry {
+    my ($user, $entry_id, $title, $body) = @_;
+
+    die 'entry_id required' unless defined $entry_id;
+    die 'title required' unless defined $title;
+    die 'body required' unless defined $body;
+
+    Intern::Diary::Service::Entry->update($db, +{
+            entry_id => $entry_id,
+            title => $title,
+            body => $body,
+    });
+
+    print "Updated \n";
 }
