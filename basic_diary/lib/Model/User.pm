@@ -7,7 +7,6 @@ use utf8;
 use Model::Diary;
 use Encode;
 
-our $error_flag = 0;
 
 use Class::Accessor::Lite (
   ro => [qw(
@@ -31,7 +30,7 @@ sub add_diary {
   my ($self, %args) = @_;
 
   #2回以降の追加はエラーで止める
-  if($error_flag) {
+  if(defined$self->diary) {
     die "diary only one\n";
   }
 
@@ -39,7 +38,6 @@ sub add_diary {
     diary_name => $args{name}
   );
   $self->diary($diary);
-  $error_flag = 1;
   return $diary;
 }
 
