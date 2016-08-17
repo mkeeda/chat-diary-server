@@ -8,6 +8,7 @@ use lib 't/lib';
 use parent qw(Test::Class);
 
 use Test::Intern::Diary;
+use Test::Intern::Diary::Factory;
 
 use Test::More;
 use Test::Deep;
@@ -33,32 +34,8 @@ sub find_entries_by_diary_id : Tests {
     my ($self) = @_;
 
     my $limit = 10;
-    my $title = random_regex('test_diary_\w{15}');
     my $c = Intern::Diary::Context->new;
-
-    #userをランダムなnameで生成
-    my $name = random_regex('test_entry_\w{15}');
-    $c->dbh->query(q[
-        INSERT INTO user (name)
-        VALUES (?)
-        ], [ $name ]);
-
-    my $user = Intern::Diary::Service::User->find_user_by_name($c->dbh, {
-            name => $name,
-        });
-
-    #diaryを生成
-    my $dbh = $c->dbh;
-    $dbh->query(q[
-        INSERT INTO diary (user_id, title)
-        VALUES (?)
-        ], [ $user->user_id, $title ]);
-    my $diary_id = $dbh->last_insert_id;
-
-    my $diary = Intern::Diary::Service::Diary->find_diary_by_id($c->dbh, {
-            user => $user,
-            diary_id => $diary_id,
-        });
+    my $diary= create_diary;
 
     subtest 'diary_idないとき失敗する' => sub {
         dies_ok {
@@ -71,7 +48,7 @@ sub find_entries_by_diary_id : Tests {
     subtest 'limitないとき失敗する' => sub {
         dies_ok {
             my $entry = Intern::Diary::Service::Entry->find_entries_by_diary_id($c->dbh, {
-                    diary_id => $diary_id
+                    diary_id => $diary->diary_id
                 });
         };
     };
@@ -91,7 +68,7 @@ sub find_entries_by_diary_id : Tests {
             $dbh->query(q[
                 INSERT INTO entry (title, body, created_date, diary_id)
                 VALUES (?)
-                ], [ $entry_title, $body,  $created_date, $diary_id]);
+                ], [ $entry_title, $body,  $created_date, $diary->diary_id]);
 
             my $entry_id = $dbh->last_insert_id;
           
@@ -105,7 +82,7 @@ sub find_entries_by_diary_id : Tests {
 
 
         my $got_entries = Intern::Diary::Service::Entry->find_entries_by_diary_id($c->dbh, {
-                diary_id => $diary_id,
+                diary_id => $diary->diary_id,
                 limit => $limit,
             });
         
@@ -120,14 +97,13 @@ sub find_entries_by_diary_id : Tests {
                 title => $entry_titles->[$index],
                 body => $bodies->[$index],
                 created_date => DateTime::Format::MySQL->format_datetime($created_dates->[$index]),
-                diary_id => $diary_id,
+                diary_id => $diary->diary_id,
             );
         }
         cmp_deeply $got_entries, $expected_entries, '内容が一致する';
 
     };
 }
-
 
 sub create : Tests {
     my ($self) = @_;
@@ -139,25 +115,12 @@ sub create : Tests {
     #bodyをランダム生成
     my $body = random_regex('test_diary_\w{15}');
 
-    #userをランダムなnameで生成
-    my $name = random_regex('test_diary_\w{15}');
-    $c->dbh->query(q[
-        INSERT INTO user (name)
-        VALUES (?)
-        ], [ $name ]);
-
-    my $user = Intern::Diary::Service::User->find_user_by_name($c->dbh, {
-            name => $name,
-        });
-
     #diaryを生成
-    my $dbh = $c->dbh;
-    $dbh->query(q[
-        INSERT INTO diary (user_id, title)
-        VALUES (?)
-        ], [ $user->user_id, $title ]);
-    my $diary_id = $dbh->last_insert_id;
-
+    my $diary = create_diary(
+        title => $title,
+        body => $body
+    );
+    my $diary_id = $diary->diary_id;
     subtest 'diary_idわたさないとき失敗する' => sub {
         dies_ok {
             Intern::Diary::Service::Entry->create($c->dbh, {
@@ -217,30 +180,11 @@ sub add_entry : Tests {
     #bodyをランダム生成
     my $body = random_regex('test_diary_\w{15}');
 
-    #userをランダムなnameで生成
-    my $name = random_regex('test_diary_\w{15}');
-    $c->dbh->query(q[
-        INSERT INTO user (name)
-        VALUES (?)
-        ], [ $name ]);
-
-    my $user = Intern::Diary::Service::User->find_user_by_name($c->dbh, {
-            name => $name,
-        });
-
-    #diaryを生成
-    my $dbh = $c->dbh;
-    $dbh->query(q[
-        INSERT INTO diary (user_id, title)
-        VALUES (?)
-        ], [ $user->user_id, $title ]);
-    my $diary_id = $dbh->last_insert_id;
-
-    my $diary = Intern::Diary::Service::Diary->find_diary_by_id($dbh, {
-            user => $user,
-            diary_id => $diary_id,
-        });
-
+    my $diary = create_diary(
+        title => $title,
+        body => $body
+    );
+    my $diary_id = $diary->diary_id;
     subtest 'diaryわたさないとき失敗する' => sub {
         dies_ok {
             Intern::Diary::Service::Entry->add_entry($c->dbh, {
