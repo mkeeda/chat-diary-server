@@ -22,6 +22,23 @@ sub find_diary_by_id {
     return Intern::Diary::Model::Diary->new($row);
 }
 
+sub find_diarys_by_user {
+    my ($class, $db, $args) = @_;
+
+    my $user = $args->{user} // croak 'user required';
+    my $limit = $args->{limit} // croak 'limit required';
+    
+
+    my $diarys = $db->select_all(q[
+        SELECT * FROM diary
+          WHERE user_id  = ?
+          LIMIT ?
+    ], $user->user_id, $limit) or return;
+    return [ map {
+        Intern::Diary::Model::Diary->new($_);
+    } @$diarys ];
+}
+
 sub create {
     my ($class, $db, $args) = @_;
 
@@ -34,21 +51,21 @@ sub create {
         ], [ $user_id, $title]);
 }
 
-sub update {
-    my ($class, $db, $args) = @_;
-
-    my $diary_id = $args->{diary_id} // croak 'diary_id required';
-    my $comment = $args->{comment} // '';
-
-    $db->query(q[
-        UPDATE diary
-        SET
-        comment = ?,
-        updated = ?
-        WHERE
-        diary_id = ?
-        ], $comment, Intern::Diary::Util->now, $diary_id);
-}
+# sub update {
+#     my ($class, $db, $args) = @_;
+#
+#     my $diary_id = $args->{diary_id} // croak 'diary_id required';
+#     my $comment = $args->{comment} // '';
+#
+#     $db->query(q[
+#         UPDATE diary
+#         SET
+#         comment = ?,
+#         updated = ?
+#         WHERE
+#         diary_id = ?
+#         ], $comment, Intern::Diary::Util->now, $diary_id);
+# }
 
 sub add_diary {
     my ($class, $db, $args) = @_;
