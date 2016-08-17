@@ -116,19 +116,14 @@ sub create : Tests {
     };
 
     subtest 'diaryを作成できる' => sub {
-        #先にDiaryを登録
-        my $dbh = $c->dbh;
-        $dbh->query(q[
-            INSERT INTO diary (user_id, title)
-            VALUES (?)
-            ], [ $user->user_id, $title ]);
-        my $diary_id = $dbh->last_insert_id;
 
-        Intern::Diary::Service::Diary->create($c->dbh, {
+        my $dbh = $c->dbh;
+        Intern::Diary::Service::Diary->create($dbh, {
                 user_id => $user->user_id,
                 title => $title,
             });
 
+        my $diary_id = $dbh->last_insert_id;
         my $diary = $c->dbh->select_row(q[
             SELECT * FROM diary
               WHERE
@@ -176,18 +171,13 @@ sub add_diary : Tests {
     };
 
     subtest 'diaryを追加できる' => sub {
-        #先にDiaryを登録
-        my $dbh = $c->dbh;
-        $dbh->query(q[
-            INSERT INTO diary (user_id, title)
-            VALUES (?)
-            ], [ $user->user_id, $title ]);
-        my $diary_id = $dbh->last_insert_id;
 
-        Intern::Diary::Service::Diary->add_diary($c->dbh, {
+        my $dbh = $c->dbh;
+        Intern::Diary::Service::Diary->add_diary($dbh, {
                 user=> $user,
                 diary_title => $title,
             });
+        my $diary_id = $dbh->last_insert_id;
 
         my $diary = $c->dbh->select_row(q[
             SELECT * FROM diary
