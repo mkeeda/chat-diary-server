@@ -15,6 +15,7 @@ my %HANDLERS = (
     add_e  => \&add_entry,
     list_d => \&list_diaries,
     list_e => \&list_entries,
+    delete_e => \&delete_entry,
 );
 
 my $name     = shift @ARGV;
@@ -114,4 +115,18 @@ sub list_entries {
         $entry->created_date->ymd ."\n";
     }
 
+}
+
+sub delete_entry {
+    my ($user, $diary_id, $entry_id) = @_;
+
+    die 'diary_id required' unless defined $diary_id;
+    die 'entry_id required' unless defined $entry_id;
+
+    Intern::Diary::Service::Entry->delete_entry_by_entry_id($db, +{
+            diary_id => $diary_id,
+            entry_id => $entry_id,
+    });
+
+    print "Deleted \n";
 }

@@ -25,6 +25,18 @@ sub find_entries_by_diary_id {
     } @$entries ];
 }
 
+sub find_entry_by_entry_id {
+    my ($class, $db, $args) = @_;
+
+    my $entry_id = $args->{entry_id} // croak 'entry_id required';
+
+    my $row = $db->select_row(q[
+        SELECT * FROM entry
+          WHERE entry_id  = ?
+    ], $entry_id) or return;
+    return Intern::Diary::Model::Entry->new($row);
+}
+
 sub create {
     my ($class, $db, $args) = @_;
 
@@ -38,6 +50,16 @@ sub create {
         INSERT INTO entry (diary_id, title, body, created_date)
           VALUES (?)
     ], [ $diary_id, $title, $body, $now ]);
+}
+
+sub delete_entry {
+    my ($class, $db, $entry) = @_;
+
+    $db->query(q[
+        DELETE FROM entry
+          WHERE
+            entry_id = ?
+    ], $entry->entry_id);
 }
 
 sub add_entry {
@@ -55,5 +77,18 @@ sub add_entry {
         });
 
 } 
+
+sub delete_entry_by_entry_id {
+    my ($class, $db, $args) = @_;
+
+    my $diary_id = $args->{diary_id} // croak 'diary_id required';
+    my $entry_id = $args->{entry_id} // croak 'entry_id required';
+
+   my $entry = $class->find_entry_by_entry_id($db, +{
+           entry_id => $entry_id
+       });
+
+   $class->delete_entry($db, $entry);
+}
 
 1;
