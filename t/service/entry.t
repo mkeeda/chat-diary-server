@@ -86,9 +86,8 @@ sub find_entries_by_diary_id : Tests {
                 limit => $limit,
             });
         
-        is scalar(@$got_entries), 2;
+        is scalar(@$got_entries), 2, 'エントリ数が一致する';
 
-        ##TODO entriesの内容をテストする
         my $expected_entries = [];
         for my $index (0..1) {
             push @$expected_entries, 
@@ -102,6 +101,36 @@ sub find_entries_by_diary_id : Tests {
         }
         cmp_deeply $got_entries, $expected_entries, '内容が一致する';
 
+    };
+}
+
+sub find_entry_by_entry_id : Tests {
+    my ($self) = @_;
+
+    my $c = Intern::Diary::Context->new;
+
+    #エントリ生成
+    my $expected_entry = create_entry;
+    my $entry_id = $expected_entry->entry_id;
+    
+    subtest 'entry_idわたさないとき失敗する' => sub {
+        dies_ok {
+            Intern::Diary::Service::Entry->find_entry_by_entry_id($c->dbh, {
+                });
+        };
+    };
+
+    subtest 'entryが見つかる' => sub {
+
+        my $dbh = $c->dbh;
+        my $got_entry = Intern::Diary::Service::Entry->find_entry_by_entry_id($dbh, {
+                entry_id => $entry_id,
+            });
+
+        my $got_entry_id = $dbh->last_insert_id;
+
+        ok $got_entry, 'エントリみつかった';
+        cmp_deeply $got_entry, $expected_entry, '内容が一致する';
     };
 }
 
