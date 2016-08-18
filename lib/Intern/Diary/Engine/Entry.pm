@@ -52,10 +52,8 @@ sub delete_get {
     
     my ($class, $c) = @_;
 
-    my $diary_id = $c->req->parameters->{diary_id};
     my $entry_id = $c->req->parameters->{entry_id};
 
-    
     my $entry = Intern::Diary::Service::Entry->find_entry_by_entry_id(
         $c->dbh, {
             user => $c->user,
@@ -66,10 +64,24 @@ sub delete_get {
     }
 
     $c->html('entry/delete.html', {
-            diary_id => $diary_id,
-            entry => $entry,
+            entry_id => $entry->entry_id,
+            title => $entry->title,
+            body=> $entry->body,
         });
 }
+
+sub delete_post {
+    my ($class, $c) = @_;
+
+    my $entry_id = $c->req->parameters->{entry_id};
+
+    Intern::Diary::Service::Entry->delete_entry_by_entry_id($c->dbh, {
+            entry_id => $entry_id,
+    });
+
+    $c->res->redirect('/');
+}
+
 
 1;
 __END__

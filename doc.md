@@ -13,8 +13,8 @@ diary.pl <username> update_e <entry_id> <entry_title> <body>
 日記の一覧表示 GET /
 記事の一覧表示 GET /diaries/diary_id
 記事の追加 POST /entries
+記事の削除 POST /entries/delete
 
 日記の追加 POST /diary/add?diary_title=diary_title
-記事の削除 POST /entry/delete?diary_id=diary_id&entry_id=entry_id
 記事の更新 POST /entry/update?entry_id=entry_id&entry_title=entry_title&body=body
 ```

@@ -98,7 +98,6 @@ sub add_entry {
 sub delete_entry_by_entry_id {
     my ($class, $db, $args) = @_;
 
-    my $diary_id = $args->{diary_id} // croak 'diary_id required';
     my $entry_id = $args->{entry_id} // croak 'entry_id required';
 
    my $entry = $class->find_entry_by_entry_id($db, +{

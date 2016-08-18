@@ -1,0 +1,27 @@
+[% WRAPPER "_wrapper.tt" %]
+
+<form action="/entries/delete" method="post">
+    <input type="hidden" name="entry_id" value="[% entry_id %]"/>
+    <p>本当に削除しますか?</p>
+    <table>
+        <tr>
+            <th><label for="title">タイトル</label></th>
+            <td>
+                [% title %]
+            </td>
+        </tr>
+        <tr>
+            <th><label for="body">本文</label></th>
+            <td>
+                [% body %]
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" class="submit">
+                <input type="submit" value="削除"/>
+            </td>
+        </tr>
+    </table>
+</form>
+
+[% END %]

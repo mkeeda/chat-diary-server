@@ -26,6 +26,15 @@ sub make_router {
             engine => 'Entry',
             action => 'add_post',
         } => { method => 'POST' };
+
+        connect '/entries/{entry_id}/delete' => {
+            engine => 'Entry',
+            action => 'delete_get',
+        } => { method => 'GET' };
+        connect '/entries/delete' => {
+            engine => 'Entry',
+            action => 'delete_post',
+        } => { method => 'POST' };
     };
 }
 
