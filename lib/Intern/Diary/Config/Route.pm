@@ -12,6 +12,11 @@ sub make_router {
             engine => 'Index',
             action => 'default',
         };
+
+        connect '/diaries/{diary_id}' => {
+            engine => 'Diary',
+            action => 'diary',
+        };
     };
 }
 

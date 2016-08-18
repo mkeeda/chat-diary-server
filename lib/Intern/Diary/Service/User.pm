@@ -9,10 +9,10 @@ use Carp qw(croak);
 use Intern::Diary::Util;
 use Intern::Diary::Model::User;
 
-# sub find_or_create_user_by_name {
-#     my ($class, $db, $args) = @_;
-#     return $class->find_user_by_name($db, $args) // $class->create($db, $args);
-# }
+sub find_or_create_user_by_name {
+    my ($class, $db, $args) = @_;
+    return $class->find_user_by_name($db, $args) // $class->create($db, $args);
+}
 
 sub find_user_by_name {
     my ($class, $db, $args) = @_;

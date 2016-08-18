@@ -23,6 +23,7 @@ use Class::Accessor::Lite::Lazy (
 
 use Intern::Diary::Request;
 use Intern::Diary::Config;
+use Intern::Diary::Service::User;
 
 ### Properties
 
@@ -135,4 +136,11 @@ sub dbh {
     return DBIx::Sunny->connect($dsn, $user, $password);
 }
 
+sub user {
+    my ($self) = @_;
+    my $user = Intern::Diary::Service::User->find_user_by_name(
+        $self->dbh, {
+            name => 'testname',
+        });
+}
 1;
