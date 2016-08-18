@@ -81,7 +81,7 @@ sub list_diaries {
     }
     printf "--- %s's Diaries ---\n", $user->name;
 
-    my $diaries = Intern::Diary::Service::Diary->find_diarys_by_user($db, +{
+    my $diaries = Intern::Diary::Service::Diary->find_diaries_by_user($db, +{
         user => $user,
         limit => $limit
     });

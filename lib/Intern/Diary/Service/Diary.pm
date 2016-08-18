@@ -22,21 +22,21 @@ sub find_diary_by_id {
     return Intern::Diary::Model::Diary->new($row);
 }
 
-sub find_diarys_by_user {
+sub find_diaries_by_user {
     my ($class, $db, $args) = @_;
 
     my $user = $args->{user} // croak 'user required';
     my $limit = $args->{limit} // croak 'limit required';
     
 
-    my $diarys = $db->select_all(q[
+    my $diaries = $db->select_all(q[
         SELECT * FROM diary
           WHERE user_id  = ?
           LIMIT ?
     ], $user->user_id, $limit) or return;
     return [ map {
         Intern::Diary::Model::Diary->new($_);
-    } @$diarys ];
+    } @$diaries ];
 }
 
 sub create {

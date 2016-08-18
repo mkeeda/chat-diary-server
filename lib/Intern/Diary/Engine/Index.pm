@@ -10,7 +10,7 @@ sub default {
     
     my ($class, $c) = @_;
 
-    my $diaries = Intern::Diary::Service::Diary->find_diarys_by_user(
+    my $diaries = Intern::Diary::Service::Diary->find_diaries_by_user(
         $c->dbh, {
             user => $c->user,
             limit => 10,
