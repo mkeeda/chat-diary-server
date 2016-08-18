@@ -4,7 +4,6 @@ use utf8;
 
 use DBIx::Sunny;
 use Encode qw(encode_utf8 decode_utf8);
-use Data::Dumper;
 
 use FindBin;
 use lib "$FindBin::Bin/../lib";
@@ -36,7 +35,6 @@ unless ($user) {
     $user = Intern::Diary::Service::User->create($db, +{ name => $name });
 }
 
-print Dumper $user;
 
 my $handler = $HANDLERS{ $command };
 $handler->($user, @ARGV);
