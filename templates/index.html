@@ -1,7 +1,7 @@
 [% WRAPPER '_wrapper.tt' WITH title = 'Intern::Diary' %]
 [% IF diaries.size() %]
     [% FOR diary IN diaries %]
-      <a href="/diaries/[% diary.diary_id %]">[% diary.title %]</a>
+      <a href="/diaries/[% diary.diary_id %]?page=1">[% diary.title %]</a>
     [% END %]
 [% ELSE %]
     <p>日記がまだありません</p>

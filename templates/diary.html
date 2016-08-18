@@ -10,7 +10,16 @@
     </li>
     [% END %]
 </ol>
-<a href="/diaries/[% diary_id %]/entries/add">新規作成</a>
+<a href="/diaries/[% diary_id %]/entries/add">新規作成</a><br>
+
+[% IF page > 1 %]
+<a href="/diaries/[% diary_id %]?page=[% page - 1 %]">戻る</a>
+[% END %]
+
+[% IF has_next %]
+<a href="/diaries/[% diary_id %]?page=[% page + 1 %]">次へ</a>
+[% END %]
+
 [% ELSE %]
 <p>記事がまだありません</p>
 [% END %]

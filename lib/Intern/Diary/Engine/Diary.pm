@@ -12,17 +12,26 @@ sub diary {
 
     my $diary_id = $c->req->path_parameters->{diary_id};
     my $page = $c->req->query_parameters->{page};
+    my $per_page = 1;
 
-    my $entries = Intern::Diary::Service::Entry->find_entries_by_diary_id(
+    my $entries = Intern::Diary::Service::Entry->find_entries_by_diary_id_for_pager(
             $c->dbh, {
                 diary_id => $diary_id,
-                limit => 1,
+                per_page => $per_page,
                 page => $page,
                 
         });
+
+    my $has_next = scalar(@$entries) > $per_page ? 1 : 0;
+    if($has_next){
+        pop @$entries;
+    }
+    
     $c->html('diary.html',{
             entries => $entries,
             diary_id => $diary_id,
+            page => $page,
+            has_next => $has_next,
         });
 }
 
