@@ -237,6 +237,8 @@ sub update : Tests {
         ],  $entry_id);
 
         ok $entry, 'エントリできている';
+        isnt $entry->{title}, $before_title, '更新前とtitleが異なる';
+        isnt $entry->{body}, $before_body, '更新前とbodyが異なる';
         is $entry->{title}, $after_title, '更新後のtitleが一致する';
         is $entry->{body}, $after_body, '更新後のbodyが一致する';
     };
