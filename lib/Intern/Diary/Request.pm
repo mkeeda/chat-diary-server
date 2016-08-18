@@ -7,6 +7,7 @@ use utf8;
 use parent 'Plack::Request';
 
 use Hash::MultiValue;
+use Encode qw(decode_utf8);
 
 sub parameters {
     my $self = shift;
@@ -26,6 +27,11 @@ sub path_parameters {
         delete $self->env->{'plack.request.merged'}; # remove instance cache
     }
     return $self->{_path_parameters} ||= Hash::MultiValue->new;
+}
+
+sub string_param {
+    my ($self, $key) = @_;
+    return decode_utf8 $self->parameters->{$key};
 }
 
 sub is_xhr {

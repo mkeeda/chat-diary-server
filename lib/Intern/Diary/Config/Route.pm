@@ -17,6 +17,15 @@ sub make_router {
             engine => 'Diary',
             action => 'diary',
         };
+
+        connect '/diaries/{diary_id}/entries/add' => {
+            engine => 'Entry',
+            action => 'add_get',
+        } => { method => 'GET' };
+        connect '/entries' => {
+            engine => 'Entry',
+            action => 'add_post',
+        } => { method => 'POST' };
     };
 }
 

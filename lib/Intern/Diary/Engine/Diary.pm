@@ -10,14 +10,16 @@ sub diary {
     
     my ($class, $c) = @_;
 
+    my $diary_id = $c->req->path_parameters->{diary_id};
+
     my $entries = Intern::Diary::Service::Entry->find_entries_by_diary_id(
             $c->dbh, {
-                diary_id => $c->req->path_parameters->{diary_id},
+                diary_id => $diary_id,
                 limit => 10,
         });
-
     $c->html('diary.html',{
             entries => $entries,
+            diary_id => $diary_id,
         });
 }
 
