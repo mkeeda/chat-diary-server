@@ -6,6 +6,9 @@ use DBIx::Sunny;
 use Encode qw(encode_utf8 decode_utf8);
 use Data::Dumper;
 
+use FindBin;
+use lib "$FindBin::Bin/../lib";
+
 use Intern::Diary::Service::User;
 use Intern::Diary::Service::Diary;
 use Intern::Diary::Service::Entry;
