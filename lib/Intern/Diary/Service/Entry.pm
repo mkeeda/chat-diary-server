@@ -12,17 +12,25 @@ sub find_entries_by_diary_id {
     my ($class, $db, $args) = @_;
 
     my $diary_id = $args->{diary_id} // croak 'diary_id required';
-    my $limit = $args->{limit} // croak 'limit required';
-    
 
+    my $per_page = $args->{limit} // croak 'limit required';
+    my $page = $args->{page};
+
+    my $offset = 0;
+    $offset = ($page - 1) * $per_page
+        if defined $page && defined $per_page;
+
+    my $entries = [];
     my $entries = $db->select_all(q[
         SELECT * FROM entry
-          WHERE diary_id  = ?
-          LIMIT ?
-    ], $diary_id, $limit) or return;
+        WHERE diary_id  = ?
+        ORDER BY diary_id, created_date DESC
+        LIMIT ?
+        OFFSET ?
+        ], $diary_id, $per_page, $offset) or return;
     return [ map {
         Intern::Diary::Model::Entry->new($_);
-    } @$entries ];
+        } @$entries ];
 }
 
 sub find_entry_by_entry_id {
