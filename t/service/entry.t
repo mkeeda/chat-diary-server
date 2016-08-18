@@ -339,26 +339,13 @@ sub delete_entry_by_entry_id : Tests {
 
     my $c = Intern::Diary::Context->new;
 
-    #diaryを生成
-    my $diary = create_diary;
-    my $diary_id = $diary->diary_id;
-
     #エントリ生成
     my $entry = create_entry;
     my $entry_id = $entry->entry_id;
 
-    subtest 'diary_idわたさないとき失敗する' => sub {
-        dies_ok {
-            Intern::Diary::Service::Entry->delete_entry_by_entry_id($c->dbh, {
-                    entry_id => $entry_id,
-                });
-        };
-    };
-
     subtest 'entry_idわたさないとき失敗する' => sub {
         dies_ok {
             Intern::Diary::Service::Entry->delete_entry_by_entry_id($c->dbh, {
-                    diary_id => $diary_id,
                 });
         };
     };
@@ -368,7 +355,6 @@ sub delete_entry_by_entry_id : Tests {
         my $dbh = $c->dbh;
         Intern::Diary::Service::Entry->delete_entry_by_entry_id($c->dbh, {
                 entry_id => $entry_id,
-                diary_id => $diary_id,
             });
 
         my $entry = $c->dbh->select_row(q[
