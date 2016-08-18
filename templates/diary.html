@@ -1,0 +1,14 @@
+[% WRAPPER '_wrapper.tt' %]
+[% IF entries.size() %]
+<ol>
+    [% FOR entry IN entries %]
+    <li>
+        [% entry.title %] - [% entry.body %] -
+        [% entry.created_date.strftime('%Y-%m-%d') %]
+    </li>
+    [% END %]
+</ol>
+[% ELSE %]
+<p>記事がまだありません</p>
+[% END %]
+[% END # WRAPPER %]
