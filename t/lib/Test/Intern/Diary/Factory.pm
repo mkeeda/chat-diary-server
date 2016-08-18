@@ -61,15 +61,15 @@ sub create_entry {
     my $body = $args{body} // random_regex('\w{50}');
     my $created_date = $args{created_date} // Intern::Diary::Util::now;
     my $diary = create_diary;
-    my ($diary_id) = $args{diary_id} // $diary->diary_id;
+    my $diary_id = $args{diary_id} // $diary->diary_id;
 
     #entryを生成
     my $c = Intern::Diary::Context->new;
     my $dbh = $c->dbh;
-    my $entry = $dbh->select_row(q[
-        INSERT INTO entry (title, body, created_date, diary_id)
+    $dbh->query(q[
+        INSERT INTO entry (diary_id, title, body, created_date)
         VALUES (?)
-        ], [ $title, $body, $created_date, $diary_id]);
+        ], [ $diary_id, $title, $body, $created_date ]);
     my $entry_id = $dbh->last_insert_id;
 
     return Intern::Diary::Service::Entry->find_entry_by_entry_id($dbh, {

@@ -116,10 +116,7 @@ sub create : Tests {
     my $body = random_regex('test_diary_\w{15}');
 
     #diaryを生成
-    my $diary = create_diary(
-        title => $title,
-        body => $body
-    );
+    my $diary = create_diary;
     my $diary_id = $diary->diary_id;
     subtest 'diary_idわたさないとき失敗する' => sub {
         dies_ok {
@@ -170,6 +167,81 @@ sub create : Tests {
     };
 }
 
+sub update : Tests {
+    my ($self) = @_;
+
+    my $c = Intern::Diary::Context->new;
+
+
+    #diaryを生成
+    my $diary = create_diary;
+    my $diary_id = $diary->diary_id;
+
+    #titleをランダム生成
+    my $before_title = random_regex('test_diary_\w{15}');
+    #bodyをランダム生成
+    my $before_body = random_regex('test_diary_\w{15}');
+
+    #エントリ生成
+    my $entry = create_entry(
+        title => $before_title,
+        body => $before_body,
+    );
+    my $entry_id = $entry->entry_id;
+
+    #titleをランダム生成
+    my $after_title = random_regex('test_diary_\w{15}');
+    #bodyをランダム生成
+    my $after_body = random_regex('test_diary_\w{15}');
+
+    subtest 'entry_idわたさないとき失敗する' => sub {
+        dies_ok {
+            Intern::Diary::Service::Entry->update($c->dbh, {
+                    title => $after_title,
+                    body => $after_body
+                });
+        };
+    };
+
+    subtest 'titleわたさないとき失敗する' => sub {
+        dies_ok {
+            Intern::Diary::Service::Entry->update($c->dbh, {
+                    entry_id => $entry_id,
+                    body => $after_body
+                });
+        };
+    };
+
+    subtest 'bodyわたさないとき失敗する' => sub {
+        dies_ok {
+            Intern::Diary::Service::Entry->update($c->dbh, {
+                    entry_id => $entry_id,
+                    title => $after_title,
+                });
+        };
+    };
+
+    subtest 'entryを更新できる' => sub {
+
+        my $dbh = $c->dbh;
+        Intern::Diary::Service::Entry->update($c->dbh, {
+                entry_id => $entry_id,
+                title => $after_title,
+                body => $after_body
+            });
+
+        my $entry = $c->dbh->select_row(q[
+            SELECT * FROM entry
+              WHERE
+                entry_id = ?
+        ],  $entry_id);
+
+        ok $entry, 'エントリできている';
+        is $entry->{title}, $after_title, '更新後のtitleが一致する';
+        is $entry->{body}, $after_body, '更新後のbodyが一致する';
+    };
+}
+
 sub add_entry : Tests {
     my ($self) = @_;
 
@@ -180,10 +252,7 @@ sub add_entry : Tests {
     #bodyをランダム生成
     my $body = random_regex('test_diary_\w{15}');
 
-    my $diary = create_diary(
-        title => $title,
-        body => $body
-    );
+    my $diary = create_diary;
     my $diary_id = $diary->diary_id;
     subtest 'diaryわたさないとき失敗する' => sub {
         dies_ok {
