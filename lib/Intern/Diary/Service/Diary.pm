@@ -51,21 +51,6 @@ sub create {
         ], [ $user_id, $title]);
 }
 
-# sub update {
-#     my ($class, $db, $args) = @_;
-#
-#     my $diary_id = $args->{diary_id} // croak 'diary_id required';
-#     my $comment = $args->{comment} // '';
-#
-#     $db->query(q[
-#         UPDATE diary
-#         SET
-#         comment = ?,
-#         updated = ?
-#         WHERE
-#         diary_id = ?
-#         ], $comment, Intern::Diary::Util->now, $diary_id);
-# }
 
 sub add_diary {
     my ($class, $db, $args) = @_;
