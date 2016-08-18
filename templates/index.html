@@ -1,4 +1,4 @@
-[% WRAPPER '_wrapper.tt' %]
+[% WRAPPER '_wrapper.tt' WITH title = 'Intern::Diary' %]
 [% IF diaries.size() %]
     [% FOR diary IN diaries %]
       <a href="/diaries/[% diary.diary_id %]">[% diary.title %]</a>
