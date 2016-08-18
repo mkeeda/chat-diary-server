@@ -5,6 +5,7 @@
     <li>
         [% entry.title %] - [% entry.body %] -
         [% entry.created_date.strftime('%Y-%m-%d') %]
+        <a href="/entries/[% entry.entry_id %]/update">編集</a>
         <a href="/entries/[% entry.entry_id %]/delete">削除</a>
     </li>
     [% END %]

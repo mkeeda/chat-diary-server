@@ -22,6 +22,7 @@ sub add_get {
         $c->throw(404);
     }
     $c->html('entry/add.html', {
+            action => '/entries',
             diary_id => $diary->diary_id,
         });
 }
@@ -82,6 +83,43 @@ sub delete_post {
     $c->res->redirect('/');
 }
 
+sub update_get {
+    
+    my ($class, $c) = @_;
 
+    my $entry_id = $c->req->parameters->{entry_id};
+
+    my $entry = Intern::Diary::Service::Entry->find_entry_by_entry_id(
+        $c->dbh, {
+            user => $c->user,
+            entry_id => $entry_id,
+        });
+    unless(defined $entry){
+        $c->throw(404);
+    }
+
+    $c->html('entry/add.html', {
+            action => '/entries/'. $entry_id . '/update',
+            entry_id => $entry->entry_id,
+            title => $entry->title,
+            body=> $entry->body,
+        });
+}
+
+sub update_post {
+    my ($class, $c) = @_;
+
+    my $entry_id = $c->req->parameters->{entry_id};
+    my $title = $c->req->string_param('title');
+    my $body = $c->req->string_param('body');
+
+    Intern::Diary::Service::Entry->update($c->dbh, {
+            entry_id => $entry_id,
+            title => $title,
+            body => $body,
+    });
+
+    $c->res->redirect('/');
+}
 1;
 __END__
