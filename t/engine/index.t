@@ -9,12 +9,23 @@ use parent 'Test::Class';
 
 use Test::Intern::Diary;
 use Test::Intern::Diary::Mechanize;
+use Test::Intern::Diary::Factory;
 
-sub _get : Test(3) {
+sub truncate_tables : Test(startup) {
+    my $c = Intern::Diary::Context->new;
+    my $tables = $c->dbh->table_info('', '', '%', 'TABLE')->fetchall_arrayref({});
+    $c->dbh->do("TRUNCATE `$_`") for map { $_->{TABLE_NAME} } @$tables;
+}
+
+sub _get : Tests {
+    my $diary = create_diary(
+            user => create_user(name => 'testname')
+        );
+
     my $mech = create_mech;
-    $mech->get_ok('/');
-    $mech->title_is('Intern::Diary');
-    $mech->content_contains('Intern-Diary');
+    $mech->get_ok('/', '/アクセスできるかのテスト');
+    $mech->title_is('Intern::Diary', 'titleのテスト');
+    $mech->content_contains($diary->title);
 }
 
 __PACKAGE__->runtests;
