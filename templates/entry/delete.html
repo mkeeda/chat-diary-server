@@ -1,7 +1,6 @@
 [% WRAPPER "_wrapper.tt" %]
 
-<form action="/entries/delete" method="post">
-    <input type="hidden" name="entry_id" value="[% entry_id %]"/>
+<form action="/entries/[% entry_id %]/delete" method="post">
     <p>本当に削除しますか?</p>
     <table>
         <tr>
