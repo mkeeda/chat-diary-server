@@ -12,6 +12,7 @@ use Test::Intern::Diary::Factory;
 
 use Test::More;
 use Test::Deep;
+use Test::Time time => 1;
 use Test::Exception;
 
 use String::Random qw(random_regex);
