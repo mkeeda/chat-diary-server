@@ -12,7 +12,6 @@ use Test::Intern::Diary::Factory;
 
 use Test::More;
 use Test::Deep;
-# use Test::Time time => 1;
 use Test::Exception;
 
 use String::Random qw(random_regex);
@@ -23,7 +22,6 @@ use Intern::Diary::Service::User;
 use Intern::Diary::Service::Diary;
 use Intern::Diary::Model::Entry;
 use Intern::Diary::Util;
-use Data::Dumper;
 
 sub _require : Test(startup => 1) {
     my ($self) = @_;

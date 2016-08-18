@@ -10,7 +10,6 @@ use parent qw(Test::Class);
 use Test::Intern::Diary;
 
 use Test::More;
-# use Test::Deep;
 use Test::Exception;
 
 use String::Random qw(random_regex);
