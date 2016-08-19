@@ -58,7 +58,7 @@ sub find_entries_by_diary_id : Tests {
         my $entry_titles = [];
         my $bodies = [];
         my $created_dates = [];
-        for (0..1) {
+        for (0..2) {
             my $entry_title = random_regex('test_diary_\w{15}');
             my $body = random_regex('test_diary_\w{15}');
             my $created_date = Intern::Diary::Util->now;
@@ -79,16 +79,20 @@ sub find_entries_by_diary_id : Tests {
             sleep 1;
         }
 
+        @$entry_ids = reverse @$entry_ids;
+        @$entry_titles = reverse @$entry_titles;
+        @$bodies = reverse @$bodies;
+        @$created_dates = reverse @$created_dates;
 
         my $got_entries = Intern::Diary::Service::Entry->find_entries_by_diary_id($c->dbh, {
                 diary_id => $diary->diary_id,
                 limit => $limit,
             });
         
-        is scalar(@$got_entries), 2, 'エントリ数が一致する';
+        is scalar(@$got_entries), 3, 'エントリ数が一致する';
 
         my $expected_entries = [];
-        for my $index (0..1) {
+        for my $index (0..2) {
             push @$expected_entries, 
             Intern::Diary::Model::Entry->new(
                 entry_id => $entry_ids->[$index],
