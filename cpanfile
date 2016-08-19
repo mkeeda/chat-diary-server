@@ -1,6 +1,7 @@
 # ---- for framework ---
 requires 'Carp';
 requires 'JSON::XS';
+requires 'JSON::Types';
 requires 'Class::Accessor::Lite';
 requires 'Class::Accessor::Lite::Lazy';
 requires 'Class::Load';

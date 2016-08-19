@@ -16,3 +16,9 @@ diary.pl <username> update_e <entry_id> <entry_title> <body>
 記事の削除 POST /entries/entry_id/delete
 記事の更新 POST /entries/entry_id/update
 ```
+
+#JSON-API
+```
+日記の一覧を取得 GET /api/diaries
+記事の一覧を取得 GET /api/diaries/diary_id
+```

@@ -22,4 +22,17 @@ sub created_date {
     )};
 }
 
+sub json_hash {
+    my ($self) = @_;
+
+    return {
+        entry_id => JSON::Types::number $self->entry_id,
+        diary_id => JSON::Types::number $self->diary_id,
+        title    => JSON::Types::string $self->title,
+        body     => JSON::Types::string $self->body,
+        created_date => JSON::Types::number $self->created_date->epoch(),
+        
+    };
+}
+
 1;

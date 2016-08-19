@@ -16,4 +16,14 @@ use Class::Accessor::Lite (
     new => 1
 );
 
+sub json_hash {
+    my ($self) = @_;
+
+    return {
+        diary_id => JSON::Types::number $self->diary_id,
+        user_id  => JSON::Types::number $self->user_id,
+        title    => JSON::Types::string $self->title,
+    };
+}
+
 1;
