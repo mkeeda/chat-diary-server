@@ -41,6 +41,7 @@ sub add : Tests {
             },
         });
 
+        #追加日時順に降順ソートされている
         my $entries = Intern::Diary::Service::Entry->find_entries_by_diary_id($c->dbh, {
                 diary_id => $diary->diary_id,
                 limit => 1,

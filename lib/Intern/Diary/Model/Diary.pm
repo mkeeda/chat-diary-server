@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use utf8;
 
+use JSON::Types qw();
 
 use Class::Accessor::Lite (
     ro => [qw(
@@ -11,9 +12,6 @@ use Class::Accessor::Lite (
         user_id
 
         title
-        )],
-    rw => [qw(
-        entries
         )],
     new => 1
 );
