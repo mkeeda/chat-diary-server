@@ -21,4 +21,11 @@ diary.pl <username> update_e <entry_id> <entry_title> <body>
 ```
 日記の一覧を取得 GET /api/diaries
 記事の一覧を取得 GET /api/diaries/diary_id
+記事の追加 POST /api/entries
+    POSTのJSONフォーマット
+    {
+        'diary_id' : xxx,
+        'title' : xxx,
+        'body' : xxx
+    }
 ```

@@ -8,6 +8,7 @@ use parent 'Plack::Request';
 
 use Hash::MultiValue;
 use Encode qw(decode_utf8);
+use JSON::XS;
 
 sub parameters {
     my $self = shift;
@@ -37,6 +38,12 @@ sub string_param {
 sub is_xhr {
     my $self = shift;
     return ( $self->header('X-Requested-With') || '' ) eq 'XMLHttpRequest';
+}
+
+sub convert_request_into_json {
+    my $self = shift;
+    my $json_string = $self->raw_body;
+    return JSON::XS::decode_json($json_string);
 }
 
 1;

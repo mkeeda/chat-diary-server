@@ -56,6 +56,11 @@ sub make_router {
             action => 'diary',
         }=> { method => 'GET' };
 
+        connect '/api/entries' => {
+            engine => 'API',
+            action => 'add_entry',
+        }=> { method => 'POST' };
+
     };
 }
 
