@@ -60,8 +60,7 @@ sub create_entry {
     my $title = $args{title} // random_regex('\w{50}');
     my $body = $args{body} // random_regex('\w{50}');
     my $created_date = $args{created_date} // Intern::Diary::Util::now;
-    my $diary = create_diary;
-    my $diary_id = $args{diary_id} // $diary->diary_id;
+    my $diary_id = $args{diary_id} // create_diary->diary_id;
 
     #entryを生成
     my $c = Intern::Diary::Context->new;

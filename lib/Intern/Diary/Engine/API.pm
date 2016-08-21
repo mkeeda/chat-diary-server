@@ -46,6 +46,7 @@ sub diary {
     $c->json({
             entries => [ map { $_->json_hash } @$entries ],
             per_page  => JSON::Types::number $per_page,
+            has_next => $has_next,
         });
 }
 

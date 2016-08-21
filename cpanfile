@@ -40,6 +40,7 @@ on test => sub {
     requires 'Test::Class';
     requires 'Test::Deep';
     requires 'Test::Time';
+    requires 'Test::MockTime::HiRes';
     requires 'Test::WWW::Mechanize::PSGI';
     requires 'String::Random';
     requires 'DBIx::RewriteDSN';
