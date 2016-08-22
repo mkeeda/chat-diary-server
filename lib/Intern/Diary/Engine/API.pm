@@ -98,13 +98,12 @@ sub chat {
         }
     }
     
-    if($noun_words) {
+    if(scalar(@$noun_words)) {
         $question = $noun_words->[0] . encode_utf8("はどうだった？");
     }
-    print $question . "\n";
 
     $c->json({
-            question => $question,
+            question => decode_utf8($question),
         });
 }
 
