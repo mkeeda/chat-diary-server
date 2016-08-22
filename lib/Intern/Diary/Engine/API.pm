@@ -86,6 +86,7 @@ sub chat {
     my $text = $request_json->{text};
     my $mecab = Text::MeCab->new();
     my $question = 'none';
+    my $noun = '';
 
     #名詞の単語だけ取ってくる
     my $noun_words = [];
@@ -99,11 +100,13 @@ sub chat {
     }
     
     if(scalar(@$noun_words)) {
-        $question = $noun_words->[0] . encode_utf8("はどうだった？");
+        $noun = $noun_words->[0];
+        $question = $noun . encode_utf8("はどうだった？");
     }
 
     $c->json({
             question => decode_utf8($question),
+            noun => decode_utf8($noun),
         });
 }
 
