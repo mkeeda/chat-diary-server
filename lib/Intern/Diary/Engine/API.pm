@@ -5,6 +5,8 @@ use warnings;
 use utf8;
 
 use JSON::Types;
+use Text::MeCab;
+use Encode;
 
 use Intern::Diary::Service::Diary;
 use Intern::Diary::Service::Entry;
@@ -74,6 +76,36 @@ sub add_entry {
             status => 'success',
         });
 
+}
+
+sub chat {
+    my ($class, $c) = @_;
+
+    my $request_json = $c->req->convert_request_into_json;
+
+    my $text = $request_json->{text};
+    my $mecab = Text::MeCab->new();
+    my $question = 'none';
+
+    #名詞の単語だけ取ってくる
+    my $noun_words = [];
+    for (my $node = $mecab->parse($text); $node; $node = $node->next) {
+        my $feature = [];
+        my $surface = $node->surface;
+        @$feature = split( /,/, $node->feature);
+        if( encode_utf8("名詞") eq $feature->[0] ){
+            push @$noun_words, $surface;
+        }
+    }
+    
+    if($noun_words) {
+        $question = $noun_words->[0] . encode_utf8("はどうだった？");
+    }
+    print $question . "\n";
+
+    $c->json({
+            question => $question,
+        });
 }
 
 

@@ -34,6 +34,9 @@ requires 'Starlet';
 
 requires 'Devel::KYTProf';
 
+# ---- for chat ----
+requires 'Text::MeCab';
+
 # ---- for test ----
 on test => sub {
     requires 'Test::More';

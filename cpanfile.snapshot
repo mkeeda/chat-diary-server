@@ -140,6 +140,15 @@ DISTRIBUTIONS
       Scalar::Util 0
       Test::Exception 0
       Test::More 0.18
+  Class-Accessor-0.34
+    pathname: K/KA/KASEI/Class-Accessor-0.34.tar.gz
+    provides:
+      Class::Accessor 0.34
+      Class::Accessor::Fast 0.34
+      Class::Accessor::Faster 0.34
+    requirements:
+      ExtUtils::MakeMaker 0
+      base 1.01
   Class-Accessor-Lite-0.08
     pathname: K/KA/KAZUHO/Class-Accessor-Lite-0.08.tar.gz
     provides:
@@ -934,6 +943,18 @@ DISTRIBUTIONS
       Test::Requires 0
       parent 0
       perl 5.008001
+  Devel-CheckLib-1.07
+    pathname: M/MA/MATTN/Devel-CheckLib-1.07.tar.gz
+    provides:
+      Devel::CheckLib 1.07
+    requirements:
+      Exporter 0
+      ExtUtils::MakeMaker 0
+      File::Spec 0
+      File::Temp 0.16
+      IO::CaptureOutput 1.0801
+      Test::More 0.62
+      perl 5.00405
   Devel-GlobalDestruction-0.13
     pathname: H/HA/HAARG/Devel-GlobalDestruction-0.13.tar.gz
     provides:
@@ -1452,6 +1473,21 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.008001
+  IO-CaptureOutput-1.1104
+    pathname: D/DA/DAGOLDEN/IO-CaptureOutput-1.1104.tar.gz
+    provides:
+      IO::CaptureOutput 1.1104
+    requirements:
+      Carp 0
+      Exporter 0
+      ExtUtils::MakeMaker 6.17
+      File::Basename 0
+      File::Temp 0.16
+      Symbol 0
+      perl 5.006
+      strict 0
+      vars 0
+      warnings 0
   IO-HTML-1.001
     pathname: C/CJ/CJM/IO-HTML-1.001.tar.gz
     provides:
@@ -2631,6 +2667,25 @@ DISTRIBUTIONS
       Algorithm::Diff 1.19
       Exporter 0
       ExtUtils::MakeMaker 0
+      perl 5.006
+  Text-MeCab-0.20016
+    pathname: D/DM/DMAKI/Text-MeCab-0.20016.tar.gz
+    provides:
+      Text::MeCab 0.20016
+      Text::MeCab::Dict undef
+      Text::MeCab::Dict::Entry undef
+    requirements:
+      Class::Accessor::Fast 0
+      Devel::CheckLib 0
+      Devel::PPPort 3.19
+      Encode 0
+      Exporter 0
+      ExtUtils::MakeMaker 6.59
+      ExtUtils::ParseXS 2.21
+      File::Spec 0
+      Test::More 0.84
+      Test::Requires 0
+      XSLoader 0.02
       perl 5.006
   Text-Table-1.131
     pathname: S/SH/SHLOMIF/Text-Table-1.131.tar.gz
