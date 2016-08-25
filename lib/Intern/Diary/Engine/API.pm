@@ -69,13 +69,16 @@ sub add_entry {
             diary_id => $diary_id,
         });
 
-    Intern::Diary::Service::Entry->add_entry($c->dbh, {
+    my $dbh = $c->dbh;
+    Intern::Diary::Service::Entry->add_entry($dbh, {
             diary => $diary,
             entry_title => $title,
             body => $body,
         }); 
+    my $entry_id = $dbh->last_insert_id;
     $c->json({
             status => 'success',
+            entry_id => $entry_id,
         });
 
 }
