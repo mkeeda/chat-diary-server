@@ -85,15 +85,29 @@ sub update {
     my $entry_id = $args->{entry_id} // croak 'entry_id required';
     my $title = $args->{title} // croak 'title required';
     my $body = $args->{body} // croak 'body required';
+    my $image_name = $args->{image_name};
 
-    $db->query(q[
-        UPDATE entry
-          SET
+    if( defined $image_name ) {
+        $db->query(q[
+            UPDATE entry
+            SET
+            title = ?,
+            body = ?,
+            image_name = ?
+            WHERE
+            entry_id = ?
+            ], $title, $body, $image_name, $entry_id );
+    }
+    else {
+        $db->query(q[
+            UPDATE entry
+            SET
             title = ?,
             body = ?
-          WHERE
+            WHERE
             entry_id = ?
-    ], $title, $body, $entry_id );
+            ], $title, $body, $entry_id );
+    }
 }
 
 sub delete_entry {

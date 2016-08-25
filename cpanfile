@@ -37,6 +37,10 @@ requires 'Devel::KYTProf';
 # ---- for chat ----
 requires 'Text::MeCab';
 
+
+requires 'Data::Printer';
+requires 'Image::Magick';
+
 # ---- for test ----
 on test => sub {
     requires 'Test::More';

@@ -8,6 +8,8 @@ use JSON::Types;
 use Text::MeCab;
 use Encode;
 
+use Data::Printer;
+use Image::Magick;
 use Intern::Diary::Service::Diary;
 use Intern::Diary::Service::Entry;
 
@@ -111,5 +113,38 @@ sub chat {
 }
 
 
+sub add_entry_image {
+    my ($class, $c) = @_;
+
+    my $entry_id = $c->req->parameters->{entry_id};
+    my $uploads = $c->req->uploads;
+
+    die 'uploads empty' unless defined $uploads;
+
+    p $entry_id;
+    p $uploads->{image}->basename;
+
+    my $entry = Intern::Diary::Service::Entry->find_entry_by_entry_id(
+        $c->dbh, {
+            entry_id => $entry_id,
+        });
+
+    Intern::Diary::Service::Entry->update(
+        $c->dbh, {
+            entry_id => $entry_id,
+            title => $entry->title,
+            body => $entry->body,
+            image_name => $entry_id . ".png",
+        });
+
+    # 静的ファイル置き場に保存
+    my $p = new Image::Magick;
+    $p->Read($uploads->{image}->path);
+    $p->Write("static/images/$entry_id.png");
+
+    $c->json({
+            status => 'success',
+        });
+}
 1;
 __END__

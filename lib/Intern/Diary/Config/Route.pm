@@ -66,6 +66,11 @@ sub make_router {
             action => 'chat',
         }=> { method => 'POST' };
 
+        connect '/api/entries/images' => {
+            engine => 'API',
+            action => 'add_entry_image',
+        }=> { method => 'POST' };
+
     };
 }
 
