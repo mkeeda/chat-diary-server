@@ -78,7 +78,7 @@ sub add_entry {
     my $entry_id = $dbh->last_insert_id;
     $c->json({
             status => 'success',
-            entry_id => $entry_id,
+            entry_id => JSON::Types::number $entry_id,
         });
 
 }
@@ -124,8 +124,6 @@ sub add_entry_image {
 
     die 'uploads empty' unless defined $uploads;
 
-    p $entry_id;
-    p $uploads->{image}->basename;
 
     my $entry = Intern::Diary::Service::Entry->find_entry_by_entry_id(
         $c->dbh, {
