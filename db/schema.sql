@@ -11,6 +11,7 @@ CREATE TABLE entry (
     `title` VARCHAR(255) NOT NULL,
     `body` TEXT NOT NULL,
     `created_date` TIMESTAMP NOT NULL,
+    `image_name` VARCHAR(32) NOT NULL,
     PRIMARY KEY (entry_id),
     KEY (diary_id, created_date)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

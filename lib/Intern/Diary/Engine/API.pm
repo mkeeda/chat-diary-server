@@ -5,7 +5,11 @@ use warnings;
 use utf8;
 
 use JSON::Types;
+use Text::MeCab;
+use Encode;
 
+use Data::Printer;
+use Image::Magick;
 use Intern::Diary::Service::Diary;
 use Intern::Diary::Service::Entry;
 
@@ -65,17 +69,83 @@ sub add_entry {
             diary_id => $diary_id,
         });
 
-    Intern::Diary::Service::Entry->add_entry($c->dbh, {
+    my $dbh = $c->dbh;
+    Intern::Diary::Service::Entry->add_entry($dbh, {
             diary => $diary,
             entry_title => $title,
             body => $body,
         }); 
+    my $entry_id = $dbh->last_insert_id;
     $c->json({
             status => 'success',
+            entry_id => JSON::Types::number $entry_id,
         });
 
 }
 
+sub chat {
+    my ($class, $c) = @_;
 
+    my $request_json = $c->req->convert_request_into_json;
+
+    my $text = $request_json->{text};
+    my $mecab = Text::MeCab->new();
+    my $question = 'none';
+    my $noun = '';
+
+    #名詞の単語だけ取ってくる
+    my $noun_words = [];
+    for (my $node = $mecab->parse($text); $node; $node = $node->next) {
+        my $feature = [];
+        my $surface = $node->surface;
+        @$feature = split( /,/, $node->feature);
+        if( encode_utf8("名詞") eq $feature->[0] ){
+            push @$noun_words, $surface;
+        }
+    }
+    
+    if(scalar(@$noun_words)) {
+        $noun = $noun_words->[0];
+        $question = $noun . encode_utf8("はどうだった？");
+    }
+
+    $c->json({
+            question => decode_utf8($question),
+            noun => decode_utf8($noun),
+        });
+}
+
+
+sub add_entry_image {
+    my ($class, $c) = @_;
+
+    my $entry_id = $c->req->parameters->{entry_id};
+    my $uploads = $c->req->uploads;
+
+    die 'uploads empty' unless defined $uploads;
+
+
+    my $entry = Intern::Diary::Service::Entry->find_entry_by_entry_id(
+        $c->dbh, {
+            entry_id => $entry_id,
+        });
+
+    Intern::Diary::Service::Entry->update(
+        $c->dbh, {
+            entry_id => $entry_id,
+            title => $entry->title,
+            body => $entry->body,
+            image_name => $entry_id . ".png",
+        });
+
+    # 静的ファイル置き場に保存
+    my $p = new Image::Magick;
+    $p->Read($uploads->{image}->path);
+    $p->Write("static/images/$entry_id.png");
+
+    $c->json({
+            status => 'success',
+        });
+}
 1;
 __END__
